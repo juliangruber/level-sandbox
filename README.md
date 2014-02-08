@@ -74,3 +74,8 @@ $ level-sandbox --log *
 ## TODO
 
   - change password without restart
+  - encrypt connection
+
+## License
+
+  MIT
