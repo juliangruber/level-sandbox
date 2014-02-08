@@ -21,7 +21,7 @@ describe('sandbox', function(){
   });
   
   it('should log it\'s listening', function(done){
-    var ps = spawn(__dirname + '/bin/sandbox.js', { cwd: dir });
+    var ps = spawn(__dirname + '/bin/sandbox.js', [], { cwd: dir });
     ps.stderr.once('data', done);
     ps.stdout.once('data', function(line){
       ps.kill();
@@ -31,7 +31,7 @@ describe('sandbox', function(){
   });
   
   it('should create a db', function(done){
-    var ps = spawn(__dirname + '/bin/sandbox.js', { cwd: dir });
+    var ps = spawn(__dirname + '/bin/sandbox.js', [], { cwd: dir });
     ps.stderr.once('data', done);
     ps.stdout.once('data', function(){
       ps.kill();
@@ -52,7 +52,7 @@ describe('sandbox', function(){
   });
   
   it('should listen on a port', function(done){
-    var ps = spawn(__dirname + '/bin/sandbox.js', { cwd: dir });
+    var ps = spawn(__dirname + '/bin/sandbox.js', [], { cwd: dir });
     ps.stderr.on('data', done);
     ps.stdout.once('data', function(){
       var con = connect(4646);
@@ -83,10 +83,10 @@ describe('sandbox', function(){
   });
   
   it('should crash when a port is taken', function(done){
-    var a = spawn(__dirname + '/bin/sandbox.js', { cwd: dir + 'a' });
+    var a = spawn(__dirname + '/bin/sandbox.js', [], { cwd: dir + 'a' });
     a.stderr.once('data', done);
     a.stdout.once('data', function(){
-      var b = spawn(__dirname + '/bin/sandbox.js', { cwd: dir + 'b' });
+      var b = spawn(__dirname + '/bin/sandbox.js', [], { cwd: dir + 'b' });
       b.stderr.once('data', function(){
         a.kill();
         b.on('exit', function(code){
@@ -100,7 +100,7 @@ describe('sandbox', function(){
   it('should catch tcp errors without crashing');
   
   it('should catch multilevel errors without crashing', function(done){
-    var ps = spawn(__dirname + '/bin/sandbox.js', { cwd: dir });
+    var ps = spawn(__dirname + '/bin/sandbox.js', [], { cwd: dir });
     ps.on('exit', done);
     ps.stdout.once('data', function(){
       var con = connect(4646);
