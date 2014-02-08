@@ -24,6 +24,10 @@ var net = require('net');
 var multilevel = require('multilevel');
 
 var db = multilevel.client();
+
+var con = net.connect(4646);
+con.pipe(db.createRpcStream()).pipe(con);
+
 db.auth('foobar', function(err){
   db.put('foo', 'bar', function(err){
     db.get('foo', function(err, value){
