@@ -1,6 +1,8 @@
 # level-sandbox
 
   A sandbox for hosting leveldbs.
+  
+  [![build status](https://secure.travis-ci.org/juliangruber/level-sandbox.png)](http://travis-ci.org/juliangruber/level-sandbox)
 
 ## Installation
 
