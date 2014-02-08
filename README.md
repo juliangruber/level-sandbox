@@ -64,7 +64,7 @@ $ level-sandbox --log auth,access
   Or get all:
 
 ```bash
-$ level-sandbox --log *
+$ level-sandbox --log all
 ```
 
 ## Deploying

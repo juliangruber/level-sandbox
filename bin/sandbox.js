@@ -29,7 +29,7 @@ var events = {
   tcp: false
 };
 
-if ('*' == program.log) {
+if ('all' == program.log) {
   Object.keys(events).forEach(function(name){
     events[name] = true;
   });
