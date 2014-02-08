@@ -36,6 +36,22 @@ db.auth('foobar', function(err){
 });
 ```
 
+## API
+
+```
+
+  Usage: sandbox.js [options] [path]
+  
+  Options:
+  
+    -h, --help          output usage information
+    -V, --version       output the version number
+    -p, --port <n>      port to listen on
+    -a, --auth <auth>   authorization
+    -l, --log <events>  log events to stdio
+
+```
+
 ## Password prompt
 
   Set auth to the special value `prompt` to be asked for credentials, so they

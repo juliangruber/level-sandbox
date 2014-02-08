@@ -40,6 +40,17 @@ describe('sandbox', function(){
     });
   });
   
+  it('should create a db in a custom location', function(done){
+    var args = ['database'];
+    var ps = spawn(__dirname + '/bin/sandbox.js', args, { cwd: dir });
+    ps.stderr.once('data', done);
+    ps.stdout.once('data', function(){
+      ps.kill();
+      assert(exists(join(dir, 'database')));
+      done();
+    });
+  });
+  
   it('should listen on a port', function(done){
     var ps = spawn(__dirname + '/bin/sandbox.js', { cwd: dir });
     ps.stderr.on('data', done);

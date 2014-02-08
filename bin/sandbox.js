@@ -15,11 +15,16 @@ var noop = function(){};
 // options
 
 program
+.usage('[options] [path]')
 .version(pkg.version)
 .option('-p, --port <n>', 'port to listen on', 4646)
 .option('-a, --auth <auth>', 'authorization')
 .option('-l, --log <events>', 'log events to stdio')
 .parse(process.argv);
+
+// leveldb path
+
+var path = program.args[0] || 'db';
 
 // log events
 
@@ -55,7 +60,7 @@ if (program.auth == 'prompt') {
 
 // database
 
-var db = level('db');
+var db = level(path);
 
 // multilevel options
 
