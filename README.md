@@ -1,7 +1,7 @@
 
 # level-sandbox
 
-  A sandbox for hosting a leveldb in.
+  A sandbox for hosting leveldbs.
 
 ## Installation
 
