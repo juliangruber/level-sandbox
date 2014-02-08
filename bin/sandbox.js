@@ -36,7 +36,7 @@ if ('*' == program.log) {
 } else if (program.log) {
   var segs = program.log.split(',');
   segs.forEach(function(name){
-    if (!(name in events)) throw new Error('unknown log event: ' + event);
+    if (!(name in events)) throw new Error('unknown log event: ' + name);
     events[name] = true;
   });
 }
