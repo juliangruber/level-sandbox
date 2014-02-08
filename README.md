@@ -1,4 +1,3 @@
-
 # level-sandbox
 
   A sandbox for hosting leveldbs.
@@ -50,12 +49,12 @@ auth: ********
 ## Logging
 
   Those log events are available:
-  
+
   - tcp
   - auth
   - access
-  
-  Get one or more of them on stdio:
+
+Get one or more of them on stdio:
 
 ```bash
 $ level-sandbox --log tcp
