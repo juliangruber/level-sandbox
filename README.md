@@ -33,4 +33,3 @@ db.auth('foobar', function(err){
 ## TODO
 
   - change password without restart
-  - expose connect, acces and auth logs

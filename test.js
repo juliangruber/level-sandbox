@@ -7,6 +7,7 @@ var join = require('path').join;
 var mkdir = require('fs').mkdirSync;
 var connect = require('net').connect;
 var multilevel = require('multilevel');
+var noop = function(){};
 
 describe('sandbox', function(){
   
@@ -89,20 +90,20 @@ describe('sandbox', function(){
   
   it('should catch multilevel errors without crashing', function(done){
     var ps = spawn(__dirname + '/bin/sandbox.js', { cwd: dir });
+    ps.on('exit', done);
     ps.stdout.once('data', function(){
       var con = connect(4646);
       con.write('attack lol\n');
-      ps.on('exit', done);
-      ps.stderr.once('data', function(){
-        var db = multilevel.client();
-        con = connect(4646);
-        con.pipe(db.createRpcStream()).pipe(con);
-        db.put('foo', 'bar', function(err){
-          ps.removeListener('exit', done);
-          ps.kill();
-          assert(!err);
-          done();
-        });
+      
+      var db = multilevel.client();
+      con = connect(4646);
+      con.pipe(db.createRpcStream()).pipe(con);
+      
+      db.put('foo', 'bar', function(err){
+        ps.removeListener('exit', done);
+        ps.kill();
+        assert(!err);
+        done();
       });
     });
   });
@@ -169,6 +170,76 @@ describe('sandbox', function(){
           ps.kill();
           assert(!err);
           done();
+        });
+      });
+    });
+  });
+  
+  it('should log tcp events', function(done){
+    var args = ['--log', 'tcp'];
+    var ps = spawn(__dirname + '/bin/sandbox.js', args, { cwd: dir });
+    ps.on('exit', done);
+    ps.stdout.once('data', function(){
+      var con = connect(4646);
+      ps.stdout.once('data', function(line){
+        equal(line.toString(), 'new connection\n');
+        con.write('attack lol\n');
+        ps.stderr.once('data', function(line){
+          ps.removeListener('exit', done);
+          ps.kill();
+          done();
+        });
+      });
+    });
+  });
+  
+  it('should log auth events', function(done){
+    var args = ['--log', 'auth', '--auth', 'password'];
+    var ps = spawn(__dirname + '/bin/sandbox.js', args, { cwd: dir });
+    ps.on('exit', done);
+    ps.stdout.once('data', function(){
+      var con = connect(4646);
+      var db = multilevel.client();
+      con.pipe(db.createRpcStream()).pipe(con);
+      db.auth('password');
+      ps.stdout.once('data', function(line){
+        equal(line.toString(), 'auth: "password"\n');
+        db.auth('wrong');
+        ps.stderr.once('data', function(line){
+          equal(line.toString(), 'auth fail: "wrong"\n');
+          ps.removeListener('exit', done);
+          ps.kill();
+          done();
+        });
+      });
+    });
+  });
+  
+  it('should log access events', function(done){
+    var args = ['--log', 'access', '--auth', 'password'];
+    var ps = spawn(__dirname + '/bin/sandbox.js', args, { cwd: dir });
+    ps.on('exit', done);
+    ps.stdout.once('data', function(){
+      var con = connect(4646);
+      var db = multilevel.client();
+      con.pipe(db.createRpcStream()).pipe(con);
+      db.put('foo', 'bar', noop);
+      ps.stderr.once('data', function(line){
+        equal(
+          line.toString(),
+          'access fail: undefined put [ \'foo\', \'bar\' ]\n'
+        );
+        db.auth('password', function(){
+          db.put('foo', 'bar');
+          ps.stdout.once('data', function(line){
+            equal(
+              line.toString(),
+              'access: password put [ \'foo\', \'bar\' ]\n'
+            );
+            ps.removeListener('exit', done);
+            ps.kill();
+            done();
+          });
         });
       });
     });
