@@ -1,20 +1,23 @@
 
 # level-sandbox
 
-## Goals
+  A sandbox for hosting a leveldb in.
 
-  - stable
-  - fast
+## Installation
+
+```bash
+$ npm install -g level-sandbox
+```
 
 ## Usage
 
-  Run the DB:
+  Start a sandbox server:
 
 ```bash
-$ forever level-sandbox --port 4646 --auth foobar
+$ level-sandbox --port 4646 --auth foobar
 ```
 
-  Connect from JS:
+  Connect to it from JS:
 
 ```js
 var net = require('net');
@@ -36,9 +39,37 @@ db.auth('foobar', function(err){
   don't show up in your terminal.
 
 ```bash
-$ forever level-sandbox --auth prompt
+$ level-sandbox --auth prompt
 auth: ********
 ```
+
+## Logging
+
+  Those log events are available:
+  
+  - tcp
+  - auth
+  - access
+  
+  Get one or more of them on stdio:
+
+```bash
+$ level-sandbox --log tcp
+$ level-sandbox --log auth,access
+```
+
+  Or get all:
+
+```bash
+$ level-sandbox --log *
+```
+
+## Deploying
+
+  Use a tool like [upstart](http://upstart.ubuntu.com/) or
+  [forever](https://github.com/nodejitsu/forever) to make sure the process keeps
+  running. Crashes are highly unlikely but might be caused by memory leaks or
+  other kinds of bugs somewhere in the stack.
 
 ## TODO
 
