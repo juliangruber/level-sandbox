@@ -12,6 +12,10 @@ var pw = require('pw');
 var pkg = require('../package');
 var noop = function(){};
 
+// process title
+
+process.title = 'level-sandbox';
+
 // options
 
 program
