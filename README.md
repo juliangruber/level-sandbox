@@ -30,6 +30,16 @@ db.auth('foobar', function(err){
 });
 ```
 
+## Password prompt
+
+  Set auth to the special value `prompt` to be asked for credentials, so they
+  don't show up in your terminal.
+
+```bash
+$ forever level-sandbox --auth prompt
+auth: ********
+```
+
 ## TODO
 
   - change password without restart

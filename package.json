@@ -6,7 +6,8 @@
   "dependencies": {
     "multilevel": "~5.5.0",
     "level": "~0.18.0",
-    "commander": "~2.1.0"
+    "commander": "~2.1.0",
+    "pw": "0.0.4"
   },
   "license": "MIT",
   "devDependencies": {

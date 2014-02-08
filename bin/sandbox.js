@@ -4,10 +4,11 @@
  * Module dependencies.
  */
 
-var level = require('level');
 var net = require('net');
+var level = require('level');
 var multilevel = require('multilevel');
 var program = require('commander');
+var pw = require('pw');
 var pkg = require('../package');
 var noop = function(){};
 
@@ -40,6 +41,18 @@ if ('*' == program.log) {
   });
 }
 
+// auth
+
+if (program.auth == 'prompt') {
+  process.stdout.write('auth: ');
+  pw(function(auth){
+    program.auth = auth;
+    listen();
+  });
+} else {
+  listen();
+}
+
 // database
 
 var db = level('db');
@@ -50,21 +63,25 @@ var opts = program.auth
   ? { auth: auth, access: access }
   : { access: access };
 
-// tcp server
+/**
+ * Start tcp server.
+ */
 
-var server = net.createServer(function(con){
-  if (events.tcp) console.log('new connection');
+function listen(){
+  var server = net.createServer(function(con){
+    if (events.tcp) console.log('new connection');
   
-  var stream = multilevel.server(db, opts);
+    var stream = multilevel.server(db, opts);
   
-  stream.on('error', events.tcp && console.error || noop);
-  con.on('error', events.tpc && console.error || noop);
-  con.pipe(stream).pipe(con);
-});
-
-server.listen(program.port, function(){
-  console.log('listening on port %s', program.port);
-});
+    stream.on('error', events.tcp && console.error || noop);
+    con.on('error', events.tpc && console.error || noop);
+    con.pipe(stream).pipe(con);
+  });
+  
+  server.listen(program.port, function(){
+    console.log('listening on port %s', program.port);
+  });
+}
 
 /**
  * Auth.

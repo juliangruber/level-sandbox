@@ -175,6 +175,28 @@ describe('sandbox', function(){
     });
   });
   
+  it('should prompt for auth'/*, function(done){
+    var args = ['--auth', 'prompt'];
+    var ps = spawn(__dirname + '/bin/sandbox.js', args, { cwd: dir });
+    ps.stderr.on('data', function(line){
+      console.log('line %s', line)
+      done();
+    });
+    ps.stdout.once('data', function(){
+      ps.stdin.write('password\n');
+      ps.stdout.once('data', function(){
+        var con = connect(4646);
+        var db = multilevel.client();
+        con.pipe(db.createRpcStream()).pipe(con);
+        db.auth('password', function(err){
+          ps.kill();
+          assert(!err);
+          done();
+        });
+      });
+    });
+  }*/);
+  
   it('should log tcp events', function(done){
     var args = ['--log', 'tcp'];
     var ps = spawn(__dirname + '/bin/sandbox.js', args, { cwd: dir });
