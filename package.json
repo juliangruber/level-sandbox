@@ -15,5 +15,8 @@
   },
   "bin": {
     "level-sandbox": "bin/sandbox.js"
+  },
+  "scripts": {
+    "test": "make test"
   }
 }
