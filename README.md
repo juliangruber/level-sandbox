@@ -48,7 +48,7 @@ db.auth('foobar', function(err){
   
     -h, --help          output usage information
     -V, --version       output the version number
-    -p, --port <n>      port to listen on
+    -p, --port <n>      port to listen on ("random" for random)
     -a, --auth <auth>   authorization
     -l, --log <events>  log events to stdio
 

@@ -21,7 +21,7 @@ process.title = 'level-sandbox';
 program
 .usage('[options] [path]')
 .version(pkg.version)
-.option('-p, --port <n>', 'port to listen on', 4646)
+.option('-p, --port <n>', 'port to listen on ("random" for random)', 4646)
 .option('-a, --auth <auth>', 'authorization')
 .option('-l, --log <events>', 'log events to stdio')
 .parse(process.argv);
@@ -87,8 +87,11 @@ function listen(){
     con.pipe(stream).pipe(con);
   });
   
-  server.listen(program.port, function(){
-    console.log('listening on port %s', program.port);
+  var port = program.port == 'random'
+    ? null
+    : program.port;
+  server.listen(port, function(){
+    console.log('listening on port %s', server.address().port);
   });
 }
 
